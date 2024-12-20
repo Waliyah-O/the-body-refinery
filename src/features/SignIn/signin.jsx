@@ -48,7 +48,7 @@ const SignIn = () => {
   return (
     <>
       <Container>
-        <Icon to="/">vitality hub</Icon>
+        <Icon to="/"> The Body Refinery Gym</Icon>
         <FormWrap>
           <FormContent
             initialValues={initialValues}

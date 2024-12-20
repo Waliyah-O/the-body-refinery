@@ -8,9 +8,10 @@ import NutritionPage from "./pages/nutrition";
 import CalculatorsPage from "./pages/calculators";
 import ExercisesPage from "./pages/exercises";
 import DrugInfoPage from "./pages/drugInfo";
-import CalorieLossComponent from "./components/Calculators/calories";
+import CalorieLossComponent from "./features/Calculators/calories";
 import ChatBotPage from "./pages/chatBot";
-import RegistrationForm from "./components/Forms/RegistrationForm";
+import RegistrationForm from "./features/Forms/RegistrationForm";
+import ShopPage from "./pages/Shop";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/calculators" element={<CalculatorsPage />} />
           <Route exact path="/exercises" element={<ExercisesPage />} />
           <Route exact path="/registration-form" element={<RegistrationForm />} />
+          <Route exact path="/shop" element={<ShopPage />} />
         
           <Route exact path="/druginfo" element={<DrugInfoPage />} />
           <Route exact path="/calorieloss" element={<CalorieLossComponent />} />

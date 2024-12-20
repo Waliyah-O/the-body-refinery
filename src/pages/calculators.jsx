@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/OtherNav";
-import Calculators from "../components/Calculators";
+import Sidebar from "../features/Sidebar";
+import Navbar from "../features/OtherNav";
+import Calculators from "../features/Calculators";
 
 const CalculatorsPage = () => {
   const [isOpen, setIsOpen] = useState(false);

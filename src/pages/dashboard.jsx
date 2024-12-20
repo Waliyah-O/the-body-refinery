@@ -1,8 +1,8 @@
 import React from "react";
 
-import Sidebar from "../components/Dashboard/Sidebar";
-import MainDash from "../components/Dashboard/MainDash/MainDash";
-import RightSide from "../components/Dashboard/RightSide/RightSide";
+import Sidebar from "../features/Dashboard/Sidebar";
+import MainDash from "../features/Dashboard/MainDash/MainDash";
+import RightSide from "../features/Dashboard/RightSide/RightSide";
 
 const DashboardPage = () => {
   return (

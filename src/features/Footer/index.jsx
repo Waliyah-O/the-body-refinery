@@ -73,7 +73,7 @@ const Footer = () => {
         <SocialMedia>
           <SocialMediaWrap>
             <SocialLogo>
-              <NavLogo onClick={toggleHome}>vitality hub</NavLogo>
+              <NavLogo onClick={toggleHome}>The Body Refinery Gym</NavLogo>
             </SocialLogo>
             <WebsiteRights>
               C  {new Date().getFullYear()} All Rights Reserved

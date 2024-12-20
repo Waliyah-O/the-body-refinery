@@ -7,7 +7,7 @@ export const homeObjOne = {
   lightBg: false,
   lightText: true,
   lightTestDesc: true,
-  topLine: "Vitality Hub",
+  topLine: "The Body Refinery Grym",
   headLine: "Lorem ipsum dolor sit amet.",
   description:
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, quae saepe molestias cumque provident ut numquam dolores quam. Et?",
@@ -43,12 +43,12 @@ export const homeObjThree = {
   lightBg: true,
   lightText: false,
   lightTestDesc: false,
-  topLine: "Lorem ipsum",
+  topLine: "Lorem ipsum...",
   headLine: "Lorem ipsum dolor sit amet.",
   description:
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, quae saepe molestias cumque provident ut numquam dolores quam. Et?",
   buttonLabel: "Start Now",
-  buttonLink: '/signup',
+  buttonLink: '/registration-form',
   imgStart: false,
   img: img3,
   alt: "tree",

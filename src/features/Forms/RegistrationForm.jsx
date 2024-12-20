@@ -68,7 +68,8 @@ const RegistrationForm = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Wellness Center Registration</h1>
-      <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
+      <form onSubmit={handleSubmit(
+        onSubmit)} style={styles.form}>
         {/* Personal Details */}
         <div style={styles.formGroup}>
           <label>Full Name</label>
@@ -187,6 +188,9 @@ const styles = {
 };
 
 export default RegistrationForm;
+
+
+
 
 
 // import React, { useState } from 'react';

@@ -51,7 +51,7 @@ const Navbar = ({ toggle }) => {
         <Nav scrollNav={scrollNav}>
           <NavbarContainer>
             <NavLogo to="/" onClick={toggleHome}>
-              vitality hub
+             The Body Refinery Gym
             </NavLogo>
             <MobileIcon onClick={toggle}>
               <FaBars />
@@ -102,32 +102,20 @@ const Navbar = ({ toggle }) => {
                   exact="true"
                   offset={-80}
                 >
-                  Sign up
+                  Register
                 </NavLinks>
               </NavItem>
             </NavMenu>
             <NavBtn>
               <NavBtnLink
-                to="/chatbot"
+                to="/shop"
                 smooth={true}
                 duration={500}
                 spy={true}
                 exact="true"
                 offset={-80}
               >
-                AI chat
-              </NavBtnLink>
-            </NavBtn>
-            <NavBtn>
-              <NavBtnLink
-                to="/signin"
-                smooth={true}
-                duration={500}
-                spy={true}
-                exact="true"
-                offset={-80}
-              >
-                Sign In
+               Shop
               </NavBtnLink>
             </NavBtn>
           </NavbarContainer>

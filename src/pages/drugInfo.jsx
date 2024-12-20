@@ -1,5 +1,5 @@
 import React from 'react'
-import DrugInfo from '../components/DrugInfo'
+import DrugInfo from '../features/DrugInfo'
 
 const DrugInfoPage = () => {
   return (

@@ -41,7 +41,7 @@ const Navbar = ({ toggle }) => {
         <Nav scrollNav={scrollNav}>
           <NavbarContainer>
             <NavLogo to="/" onClick={toggleHome}>
-              vitality hub
+            The Body Refinery Gym
             </NavLogo>
             <MobileIcon onClick={toggle}>
               <FaBars />

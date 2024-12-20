@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/OtherNav";
-import DoctorConnect from "../components/Chat";
+import Sidebar from "../features/Sidebar";
+import Navbar from "../features/OtherNav";
+import DoctorConnect from "../features/Chat";
 
 const ChatPage = () => {
   const [isOpen, setIsOpen] = useState(false);

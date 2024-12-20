@@ -1,6 +1,6 @@
 import React from "react";
-import SignIn from "../components/SignIn/signin";
-import ScrollToTop from "../components/ScrollToTop";
+import SignIn from "../features/SignIn/signin";
+import ScrollToTop from "../features/ScrollToTop";
 
 const SignInPage = () => {
   return (

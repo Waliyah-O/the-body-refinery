@@ -1,5 +1,5 @@
 import React from "react";
-import CalorieLossComponent from "../components/Calculators/calories";
+import CalorieLossComponent from "../features/Calculators/calories";
 
 const CalorieLossComponentPage = () => {
   return (

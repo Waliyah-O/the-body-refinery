@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Nutrition from "../components/Nutrition/index";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/OtherNav";
+import Nutrition from "../features/Nutrition/index";
+import Sidebar from "../features/Sidebar";
+import Navbar from "../features/OtherNav";
 
 const NutritionPage = () => {
   const [isOpen, setIsOpen] = useState(false);

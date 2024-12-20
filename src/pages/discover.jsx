@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Discover from "../components/Discover";
+import Discover from "../features/Discover";
 
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/OtherNav";
+import Sidebar from "../features/Sidebar";
+import Navbar from "../features/OtherNav";
 
 const DiscoverPage = () => {
   const [isOpen, setIsOpen] = useState(false);

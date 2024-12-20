@@ -26,7 +26,8 @@ const HeroSection = () => {
         <VideoBg loop muted autoPlay src={Video} type="video/mp4" />
       </HeroBg>
       <HeroContent>
-        <HeroH1>Virtual Health Made Easy</HeroH1>
+        <HeroH1>Transform Your Body</HeroH1>
+        <HeroH1>Transform Your Life</HeroH1>
         <HeroP>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
           beatae ea iste fugit repudiandae perspiciatis?

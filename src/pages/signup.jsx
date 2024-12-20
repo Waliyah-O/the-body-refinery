@@ -1,6 +1,6 @@
 import React from "react";
-import SignUp from "../components/SignUp/signup";
-import ScrollToTop from "../components/ScrollToTop";
+import SignUp from "../features/SignUp/signup";
+import ScrollToTop from "../features/ScrollToTop";
 
 const SignUpPage = () => {
   return (
