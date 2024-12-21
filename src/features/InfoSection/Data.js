@@ -48,7 +48,7 @@ export const homeObjThree = {
   description:
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, quae saepe molestias cumque provident ut numquam dolores quam. Et?",
   buttonLabel: "Start Now",
-  buttonLink: '/registration-form',
+  buttonLink: '/register',
   imgStart: false,
   img: img3,
   alt: "tree",

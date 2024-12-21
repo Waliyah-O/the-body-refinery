@@ -29,8 +29,7 @@ const HeroSection = () => {
         <HeroH1>Transform Your Body</HeroH1>
         <HeroH1>Transform Your Life</HeroH1>
         <HeroP>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
-          beatae ea iste fugit repudiandae perspiciatis?
+        With a focus on refining both physical and mental well-being, we emphasize a supportive community and professional guidance to help you achieve your fitness goals.
         </HeroP>
         <HeroBtnWrapper>
           <Button
@@ -38,7 +37,7 @@ const HeroSection = () => {
             onMouseLeave={onHover}
             primary="true"
             dark="true"
-            to="signup"
+            to="register"
             smooth={true}
             duration={500}
             spy={true}
