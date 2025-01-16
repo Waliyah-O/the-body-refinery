@@ -1,29 +1,148 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import jsPDF from "jspdf";
-import emailjs from "@emailjs/browser";
-
-const schema = yup.object().shape({
-  name: yup.string().required("Full name is required"),
-  dob: yup.date().required("Date of birth is required"),
-  gender: yup.string().required("Gender is required"),
-  contact: yup.string().required("Contact number is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  service: yup.array().min(1, "Select at least one service"),
-  membershipPlan: yup.string().required("Select a membership plan"),
-  fitnessConfirmation: yup.boolean().oneOf([true], "Fitness declaration is required"),
-});
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Button } from "../../../components/ui/button";
+import { Checkbox } from "../../../components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import { Alert, AlertDescription } from "../../../components/ui/alert";
+import { Separator } from "../../../components/ui/separator";
 
 const RegistrationForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+  const membershipPlans = {
+    basic: {
+      name: "Basic",
+      description: "Access to gym facilities and basic equipment",
+      monthlyMultiplier: 1,
+    },
+    standard: {
+      name: "Standard",
+      description: "Basic + Group classes and wellness workshops",
+      monthlyMultiplier: 1.5,
+    },
+    premium: {
+      name: "Premium",
+      description:
+        "Standard + Personal training sessions and premium amenities",
+      monthlyMultiplier: 2,
+    },
+  };
+
+  const servicesPricing = {
+    personalTraining: { name: "Personal Training", price: 49 },
+    groupClasses: { name: "Group Classes", price: 29 },
+    spa: { name: "Spa Services", price: 69 },
+    nutrition: { name: "Nutrition Counseling", price: 39 },
+    skinCare: { name: "Skin Care Services", price: 59 },
+    wellness: { name: "Wellness Coaching", price: 45 },
+  };
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    birthdate: "",
+    gender: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    },
+    membershipType: "",
+    membershipPlan: "",
+    services: [],
+    emergencyContact: {
+      name: "",
+      phone: "",
+      relation: "",
+    },
+    isFitForExercise: false,
   });
+
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const calculateTotalPrice = () => {
+    if (!formData.membershipType || !formData.membershipPlan) return 0;
+
+    // Base prices
+    const basePrices = {
+      monthly: 59,
+      quarterly: 159 / 3, // Per month
+      annual: 549 / 12, // Per month
+    };
+
+    // Calculate base membership price
+    let basePrice = basePrices[formData.membershipType];
+
+    // Apply plan multiplier
+    basePrice *= membershipPlans[formData.membershipPlan].monthlyMultiplier;
+
+    // Add selected services
+    const servicesTotal = formData.services.reduce((total, service) => {
+      return total + (servicesPricing[service]?.price || 0);
+    }, 0);
+
+    // Calculate total based on membership type
+    let total = basePrice + servicesTotal;
+    if (formData.membershipType === "quarterly") {
+      total *= 3;
+    } else if (formData.membershipType === "annual") {
+      total *= 12;
+    }
+
+    return total;
+  };
+
+  useEffect(() => {
+    setTotalPrice(calculateTotalPrice());
+  }, [formData.membershipType, formData.membershipPlan, formData.services]);
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    if (!formData.birthdate) newErrors.birthdate = "Birth date is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
+    if (!formData.address.street.trim())
+      newErrors.street = "Street address is required";
+    if (!formData.address.city.trim()) newErrors.city = "City is required";
+    if (!formData.address.state.trim()) newErrors.state = "State is required";
+    if (!formData.address.zipCode.trim())
+      newErrors.zipCode = "ZIP code is required";
+    if (!formData.membershipType)
+      newErrors.membershipType = "Please select a membership type";
+    if (!formData.membershipPlan)
+      newErrors.membershipPlan = "Please select a membership plan";
+    if (!formData.isFitForExercise)
+      newErrors.isFitForExercise = "You must confirm your fitness readiness";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const generatePDF = (data) => {
     const doc = new jsPDF();
@@ -37,18 +156,24 @@ const RegistrationForm = () => {
     doc.text(`Email: ${data.email}`, 10, 60);
     doc.text(`Selected Services: ${data.service.join(", ")}`, 10, 70);
     doc.text(`Membership Plan: ${data.membershipPlan}`, 10, 80);
-    doc.text(`Fitness Confirmation: ${data.fitnessConfirmation ? "Yes" : "No"}`, 10, 90);
+    doc.text(
+      `Fitness Confirmation: ${data.fitnessConfirmation ? "Yes" : "No"}`,
+      10,
+      90
+    );
 
     return doc;
   };
 
-  const onSubmit = async (data) => {
+  const handleSubmit = async ({ e, data }) => {
+    e.preventDefault();
     try {
-      // Generate PDF
+      if (validateForm()) {
+        setSubmitted(true);
+        console.log("Form submitted:", formData);
+      }
       const pdf = generatePDF(data);
       const pdfBlob = pdf.output("blob");
-
-      // Send Email using EmailJS
       const emailServiceParams = {
         from_name: data.name,
         email: data.email,
@@ -56,574 +181,441 @@ const RegistrationForm = () => {
         pdf_attachment: pdfBlob,
       };
 
-      await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailServiceParams, "YOUR_PUBLIC_KEY");
-
-      alert("Registration successful! PDF sent to the gym email.");
+      await emailjs.send(
+        "YOUR_SERVICE_ID",
+        "YOUR_TEMPLATE_ID",
+        emailServiceParams,
+        "YOUR_PUBLIC_KEY"
+      );
     } catch (error) {
-      console.error("Error sending the form: ", error);
+      console.error("Error sending the form", error);
       alert("Failed to send the form. Please try again.");
     }
   };
 
+  const handleServiceChange = (service) => {
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.includes(service)
+        ? prev.services.filter((s) => s !== service)
+        : [...prev.services, service],
+    }));
+  };
+
+  if (submitted) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardContent className="pt-6">
+          <Alert>
+            <AlertDescription>
+              Thank you for registering! We'll contact you shortly to confirm
+              your membership. Your total membership cost: $
+              {totalPrice.toFixed(2)}{" "}
+              {formData.membershipType === "monthly"
+                ? "/month"
+                : formData.membershipType === "quarterly"
+                ? "/quarter"
+                : "/year"}
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>Wellness Center Registration</h1>
-      <form onSubmit={handleSubmit(
-        onSubmit)} style={styles.form}>
-        {/* Personal Details */}
-        <div style={styles.formGroup}>
-          <label>Full Name</label>
-          <input {...register("name")} placeholder="Enter your full name" />
-          <p style={styles.error}>{errors.name?.message}</p>
-        </div>
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          The Body Refinery Gym Membership Registration
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Personal Information */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, firstName: e.target.value })
+                  }
+                  className={errors.firstName ? "border-red-500" : ""}
+                />
+                {errors.firstName && (
+                  <p className="text-red-500 text-sm">{errors.firstName}</p>
+                )}
+              </div>
+              <div className="space-y-2 ">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, lastName: e.target.value })
+                  }
+                  className={errors.lastName ? "border-red-500" : ""}
+                />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm">{errors.lastName}</p>
+                )}
+              </div>
+            </div>
 
-        <div style={styles.formGroup}>
-          <label>Date of Birth</label>
-          <input type="date" {...register("dob")} />
-          <p style={styles.error}>{errors.dob?.message}</p>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="gender">Gender</Label>
+              <Select
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, gender: value })
+                }
+              >
+                <SelectTrigger
+                  className={errors.gender ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="prefer-not-to-say">
+                    Prefer not to say
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.gender && (
+                <p className="text-red-500 text-sm">{errors.gender}</p>
+              )}
+            </div>
 
-        <div style={styles.formGroup}>
-          <label>Gender</label>
-          <select {...register("gender")}>
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-          <p style={styles.error}>{errors.gender?.message}</p>
-        </div>
-
-        <div style={styles.formGroup}>
-          <label>Contact Number</label>
-          <input type="tel" {...register("contact")} placeholder="Enter your contact number" />
-          <p style={styles.error}>{errors.contact?.message}</p>
-        </div>
-
-        <div style={styles.formGroup}>
-          <label>Email Address</label>
-          <input type="email" {...register("email")} placeholder="Enter your email" />
-          <p style={styles.error}>{errors.email?.message}</p>
-        </div>
-
-        {/* Service Preferences */}
-        <div style={styles.formGroup}>
-          <label>Services Interested In</label>
-          <div>
-            <label>
-              <input type="checkbox" value="Gym" {...register("service")} /> Gym
-            </label>
-            <label>
-              <input type="checkbox" value="Spa" {...register("service")} /> Spa
-            </label>
-            <label>
-              <input type="checkbox" value="Nutrition" {...register("service")} /> Diet & Nutrition
-            </label>
-            <label>
-              <input type="checkbox" value="Skin Treatment" {...register("service")} /> Skin Treatment
-            </label>
+            <div className="space-y-2">
+              <Label htmlFor="birthdate">Birth Date</Label>
+              <Input
+                id="birthdate"
+                type="date"
+                value={formData.birthdate}
+                onChange={(e) =>
+                  setFormData({ ...formData, birthdate: e.target.value })
+                }
+                className={errors.birthdate ? "border-red-500" : ""}
+              />
+              {errors.birthdate && (
+                <p className="text-red-500 text-sm">{errors.birthdate}</p>
+              )}
+            </div>
           </div>
-          <p style={styles.error}>{errors.service?.message}</p>
-        </div>
 
-        {/* Membership Plans */}
-        <div style={styles.formGroup}>
-          <label>Membership Plan</label>
-          <select {...register("membershipPlan")}>
-            <option value="">Select Plan</option>
-            <option value="Basic - $50">Basic - $50</option>
-            <option value="Standard - $100">Standard - $100</option>
-            <option value="Premium - $150">Premium - $150</option>
-          </select>
-          <p style={styles.error}>{errors.membershipPlan?.message}</p>
-        </div>
+          {/* Contact Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Contact Information</h3>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className={errors.email ? "border-red-500" : ""}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
+            </div>
 
-        {/* Fitness Declaration */}
-        <div style={styles.formGroup}>
-          <label>
-            <input type="checkbox" {...register("fitnessConfirmation")} /> I confirm that I am fit to engage in fitness activities.
-          </label>
-          <p style={styles.error}>{errors.fitnessConfirmation?.message}</p>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                className={errors.phone ? "border-red-500" : ""}
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone}</p>
+              )}
+            </div>
+          </div>
 
-        {/* Submit */}
-        <button type="submit" style={styles.button}>Submit</button>
-      </form>
-    </div>
+          {/* Address */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Address</h3>
+            <div className="space-y-2">
+              <Label htmlFor="street">Street Address</Label>
+              <Input
+                id="street"
+                value={formData.address.street}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    address: { ...formData.address, street: e.target.value },
+                  })
+                }
+                className={errors.street ? "border-red-500" : ""}
+              />
+              {errors.street && (
+                <p className="text-red-500 text-sm">{errors.street}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  value={formData.address.city}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, city: e.target.value },
+                    })
+                  }
+                  className={errors.city ? "border-red-500" : ""}
+                />
+                {errors.city && (
+                  <p className="text-red-500 text-sm">{errors.city}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="state">State</Label>
+                <Input
+                  id="state"
+                  value={formData.address.state}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, state: e.target.value },
+                    })
+                  }
+                  className={errors.state ? "border-red-500" : ""}
+                />
+                {errors.state && (
+                  <p className="text-red-500 text-sm">{errors.state}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="zipCode">ZIP Code</Label>
+              <Input
+                id="zipCode"
+                value={formData.address.zipCode}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    address: { ...formData.address, zipCode: e.target.value },
+                  })
+                }
+                className={errors.zipCode ? "border-red-500" : ""}
+              />
+              {errors.zipCode && (
+                <p className="text-red-500 text-sm">{errors.zipCode}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Membership Plan */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Membership Plan</h3>
+            <RadioGroup
+              onValueChange={(value) =>
+                setFormData({ ...formData, membershipPlan: value })
+              }
+              value={formData.membershipPlan}
+              className="space-y-2"
+            >
+              {Object.entries(membershipPlans).map(([key, plan]) => (
+                <div
+                  key={key}
+                  className="flex items-center space-x-2 p-4 border rounded-lg"
+                >
+                  <RadioGroupItem value={key} id={key} />
+                  <Label htmlFor={key} className="flex flex-col">
+                    <span className="font-semibold">{plan.name}</span>
+                    <span className="text-sm text-gray-500">
+                      {plan.description}
+                    </span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+            {errors.membershipPlan && (
+              <p className="text-red-500 text-sm">{errors.membershipPlan}</p>
+            )}
+          </div>
+
+          {/* Membership Duration */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Membership Duration</h3>
+            <RadioGroup
+              onValueChange={(value) =>
+                setFormData({ ...formData, membershipType: value })
+              }
+              value={formData.membershipType}
+              className="space-y-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="monthly" id="monthly" />
+                <Label htmlFor="monthly">Monthly ($59/month)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="quarterly" id="quarterly" />
+                <Label htmlFor="quarterly">Quarterly ($159/3 months)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="annual" id="annual" />
+                <Label htmlFor="annual">Annual ($549/year)</Label>
+              </div>
+            </RadioGroup>
+            {errors.membershipType && (
+              <p className="text-red-500 text-sm">{errors.membershipType}</p>
+            )}
+          </div>
+
+          {/* Additional Services */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Additional Services</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(servicesPricing).map(([key, service]) => (
+                <div
+                  key={key}
+                  className="flex items-center space-x-2 p-4 border rounded-lg"
+                >
+                  <Checkbox
+                    id={key}
+                    checked={formData.services.includes(key)}
+                    onCheckedChange={() => handleServiceChange(key)}
+                  />
+                  <Label htmlFor={key} className="flex flex-col">
+                    <span className="font-semibold">{service.name}</span>
+                    <span className="text-sm text-gray-500">
+                      ${service.price}/month
+                    </span>
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Emergency Contact */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Emergency Contact</h3>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="emergencyName">Name</Label>
+                <Input
+                  id="emergencyName"
+                  value={formData.emergencyContact.name}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      emergencyContact: {
+                        ...formData.emergencyContact,
+                        name: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="emergencyPhone">Phone</Label>
+                <Input
+                  id="emergencyPhone"
+                  type="tel"
+                  value={formData.emergencyContact.phone}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      emergencyContact: {
+                        ...formData.emergencyContact,
+                        phone: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="emergencyRelation">Relation</Label>
+                <Select
+                  value={formData.emergencyContact.relation}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      emergencyContact: {
+                        ...formData.emergencyContact,
+                        relation: value,
+                      },
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select relation" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="spouse">Spouse</SelectItem>
+                    <SelectItem value="parent">Parent</SelectItem>
+                    <SelectItem value="sibling">Sibling</SelectItem>
+                    <SelectItem value="friend">Friend</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* Fitness Confirmation */}
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="fitnessConfirmation"
+                checked={formData.isFitForExercise}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, isFitForExercise: checked })
+                }
+              />
+              <Label
+                htmlFor="fitnessConfirmation"
+                className={errors.isFitForExercise ? "text-red-500" : ""}
+              >
+                I confirm that I am fit to engage in fitness activities
+              </Label>
+            </div>
+            {errors.isFitForExercise && (
+              <p className="text-red-500 text-sm">{errors.isFitForExercise}</p>
+            )}
+          </div>
+
+          {/* Total Price Display */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h3 className="text-lg font-semibold">Total Price</h3>
+            <p className="text-2xl font-bold">
+              ${totalPrice.toFixed(2)}
+              <span className="text-sm font-normal text-gray-500">
+                {formData.membershipType === "monthly"
+                  ? "/month"
+                  : formData.membershipType === "quarterly"
+                  ? "/quarter"
+                  : "/year"}
+              </span>
+            </p>
+          </div>
+
+          <Button type="submit" className="w-full">
+            Submit Registration
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "8px",
-    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-  },
-  header: {
-    textAlign: "center",
-    marginBottom: "20px",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  error: {
-    color: "red",
-    fontSize: "12px",
-  },
-  button: {
-    backgroundColor: "#007BFF",
-    color: "#fff",
-    border: "none",
-    padding: "10px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-};
-
 export default RegistrationForm;
-
-
-
-
-
-// import React, { useState } from 'react';
-// import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
-// import { Button } from '@/components/ui/button';
-// import { Checkbox } from '@/components/ui/checkbox';
-// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-// import { Alert, AlertDescription } from '@/components/ui/alert';
-
-// const GymRegistrationForm = () => {
-//   const [formData, setFormData] = useState({
-//     firstName: '',
-//     lastName: '',
-//     email: '',
-//     phone: '',
-//     birthdate: '',
-//     membershipType: '',
-//     services: [],
-//     emergencyContact: {
-//       name: '',
-//       phone: '',
-//       relation: ''
-//     }
-//   });
-//   const [errors, setErrors] = useState({});
-//   const [submitted, setSubmitted] = useState(false);
-
-//   const validateForm = () => {
-//     const newErrors = {};
-    
-//     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-//     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-//     if (!formData.email.trim()) {
-//       newErrors.email = 'Email is required';
-//     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-//       newErrors.email = 'Invalid email format';
-//     }
-//     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-//     if (!formData.birthdate) newErrors.birthdate = 'Birth date is required';
-//     if (!formData.membershipType) newErrors.membershipType = 'Please select a membership type';
-//     if (formData.services.length === 0) newErrors.services = 'Please select at least one service';
-
-//     setErrors(newErrors);
-//     return Object.keys(newErrors).length === 0;
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (validateForm()) {
-//       setSubmitted(true);
-//       console.log('Form submitted:', formData);
-//     }
-//   };
-
-//   const handleServiceChange = (service) => {
-//     setFormData(prev => ({
-//       ...prev,
-//       services: prev.services.includes(service)
-//         ? prev.services.filter(s => s !== service)
-//         : [...prev.services, service]
-//     }));
-//   };
-
-//   if (submitted) {
-//     return (
-//       <Card className="w-full max-w-2xl mx-auto">
-//         <CardContent className="pt-6">
-//           <Alert>
-//             <AlertDescription>
-//               Thank you for registering! We'll contact you shortly to confirm your membership.
-//             </AlertDescription>
-//           </Alert>
-//         </CardContent>
-//       </Card>
-//     );
-//   }
-
-//   return (
-//     <Card className="w-full max-w-2xl mx-auto">
-//       <CardHeader>
-//         <CardTitle className="text-2xl font-bold text-center">Gym Membership Registration</CardTitle>
-//       </CardHeader>
-//       <CardContent>
-//         <form onSubmit={handleSubmit} className="space-y-6">
-//           {/* Personal Information */}
-//           <div className="space-y-4">
-//             <h3 className="text-lg font-semibold">Personal Information</h3>
-//             <div className="grid grid-cols-2 gap-4">
-//               <div className="space-y-2">
-//                 <Label htmlFor="firstName">First Name</Label>
-//                 <Input
-//                   id="firstName"
-//                   value={formData.firstName}
-//                   onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-//                   className={errors.firstName ? "border-red-500" : ""}
-//                 />
-//                 {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
-//               </div>
-//               <div className="space-y-2">
-//                 <Label htmlFor="lastName">Last Name</Label>
-//                 <Input
-//                   id="lastName"
-//                   value={formData.lastName}
-//                   onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-//                   className={errors.lastName ? "border-red-500" : ""}
-//                 />
-//                 {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
-//               </div>
-//             </div>
-
-//             <div className="space-y-2">
-//               <Label htmlFor="email">Email</Label>
-//               <Input
-//                 id="email"
-//                 type="email"
-//                 value={formData.email}
-//                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-//                 className={errors.email ? "border-red-500" : ""}
-//               />
-//               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-//             </div>
-
-//             <div className="space-y-2">
-//               <Label htmlFor="phone">Phone Number</Label>
-//               <Input
-//                 id="phone"
-//                 type="tel"
-//                 value={formData.phone}
-//                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
-//                 className={errors.phone ? "border-red-500" : ""}
-//               />
-//               {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-//             </div>
-
-//             <div className="space-y-2">
-//               <Label htmlFor="birthdate">Birth Date</Label>
-//               <Input
-//                 id="birthdate"
-//                 type="date"
-//                 value={formData.birthdate}
-//                 onChange={(e) => setFormData({...formData, birthdate: e.target.value})}
-//                 className={errors.birthdate ? "border-red-500" : ""}
-//               />
-//               {errors.birthdate && <p className="text-red-500 text-sm">{errors.birthdate}</p>}
-//             </div>
-//           </div>
-
-//           {/* Membership Type */}
-//           <div className="space-y-4">
-//             <h3 className="text-lg font-semibold">Membership Type</h3>
-//             <RadioGroup
-//               onValueChange={(value) => setFormData({...formData, membershipType: value})}
-//               value={formData.membershipType}
-//               className="space-y-2"
-//             >
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="monthly" id="monthly" />
-//                 <Label htmlFor="monthly">Monthly ($59/month)</Label>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="quarterly" id="quarterly" />
-//                 <Label htmlFor="quarterly">Quarterly ($159/3 months)</Label>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="annual" id="annual" />
-//                 <Label htmlFor="annual">Annual ($549/year)</Label>
-//               </div>
-//             </RadioGroup>
-//             {errors.membershipType && <p className="text-red-500 text-sm">{errors.membershipType}</p>}
-//           </div>
-
-//           {/* Services */}
-//           <div className="space-y-4">
-//             <h3 className="text-lg font-semibold">Select Services</h3>
-//             <div className="grid grid-cols-2 gap-4">
-//               <div className="space-y-2">
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="gym"
-//                     checked={formData.services.includes('gym')}
-//                     onCheckedChange={() => handleServiceChange('gym')}
-//                   />
-//                   <Label htmlFor="gym">Gym Access</Label>
-//                 </div>
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="personalTraining"
-//                     checked={formData.services.includes('personalTraining')}
-//                     onCheckedChange={() => handleServiceChange('personalTraining')}
-//                   />
-//                   <Label htmlFor="personalTraining">Personal Training</Label>
-//                 </div>
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="groupClasses"
-//                     checked={formData.services.includes('groupClasses')}
-//                     onCheckedChange={() => handleServiceChange('groupClasses')}
-//                   />
-//                   <Label htmlFor="groupClasses">Group Classes</Label>
-//                 </div>
-//               </div>
-//               <div className="space-y-2">
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="spa"
-//                     checked={formData.services.includes('spa')}
-//                     onCheckedChange={() => handleServiceChange('spa')}
-//                   />
-//                   <Label htmlFor="spa">Spa Services</Label>
-//                 </div>
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="nutrition"
-//                     checked={formData.services.includes('nutrition')}
-//                     onCheckedChange={() => handleServiceChange('nutrition')}
-//                   />
-//                   <Label htmlFor="nutrition">Nutrition Counseling</Label>
-//                 </div>
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox 
-//                     id="skinCare"
-//                     checked={formData.services.includes('skinCare')}
-//                     onCheckedChange={() => handleServiceChange('skinCare')}
-//                   />
-//                   <Label htmlFor="skinCare">Skin Care Services</Label>
-//                 </div>
-//               </div>
-//             </div>
-//             {errors.services && <p className="text-red-500 text-sm">{errors.services}</p>}
-//           </div>
-
-//           {/* Emergency Contact */}
-//           <div className="space-y-4">
-//             <h3 className="text-lg font-semibold">Emergency Contact</h3>
-//             <div className="space-y-4">
-//               <div className="space-y-2">
-//                 <Label htmlFor="emergencyName">Name</Label>
-//                 <Input
-//                   id="emergencyName"
-//                   value={formData.emergencyContact.name}
-//                   onChange={(e) => setFormData({
-//                     ...formData,
-//                     emergencyContact: {...formData.emergencyContact, name: e.target.value}
-//                   })}
-//                 />
-//               </div>
-//               <div className="space-y-2">
-//                 <Label htmlFor="emergencyPhone">Phone</Label>
-//                 <Input
-//                   id="emergencyPhone"
-//                   type="tel"
-//                   value={formData.emergencyContact.phone}
-//                   onChange={(e) => setFormData({
-//                     ...formData,
-//                     emergencyContact: {...formData.emergencyContact, phone: e.target.value}
-//                   })}
-//                 />
-//               </div>
-//               <div className="space-y-2">
-//                 <Label htmlFor="emergencyRelation">Relation</Label>
-//                 <Select
-//                   value={formData.emergencyContact.relation}
-//                   onValueChange={(value) => setFormData({
-//                     ...formData,
-//                     emergencyContact: {...formData.emergencyContact, relation: value}
-//                   })}
-//                 >
-//                   <SelectTrigger>
-//                     <SelectValue placeholder="Select relation" />
-//                   </SelectTrigger>
-//                   <SelectContent>
-//                     <SelectItem value="spouse">Spouse</SelectItem>
-//                     <SelectItem value="parent">Parent</SelectItem>
-//                     <SelectItem value="sibling">Sibling</SelectItem>
-//                     <SelectItem value="friend">Friend</SelectItem>
-//                     <SelectItem value="other">Other</SelectItem>
-//                   </SelectContent>
-//                 </Select>
-//               </div>
-//             </div>
-//           </div>
-
-//           <Button type="submit" className="w-full">
-//             Submit Registration
-//           </Button>
-//         </form>
-//       </CardContent>
-//     </Card>
-//   );
-// };
-
-// export default GymRegistrationForm;
-
-
-// import React from "react";
-// import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
-
-// const schema = yup.object().shape({
-//   name: yup.string().required("Full name is required"),
-//   dob: yup.date().required("Date of birth is required"),
-//   gender: yup.string().required("Gender is required"),
-//   contact: yup.string().required("Contact number is required"),
-//   email: yup.string().email("Invalid email").required("Email is required"),
-//   service: yup.array().min(1, "Select at least one service"),
-//   healthDeclaration: yup.boolean().oneOf([true], "Health declaration is required"),
-// });
-
-// const RegistrationForm = () => {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm({
-//     resolver: yupResolver(schema),
-//   });
-
-//   const onSubmit = (data) => {
-//     console.log("Form Data Submitted: ", data);
-//     alert("Registration successful!");
-//   };
-
-//   return (
-//     <div style={styles.container}>
-//       <h1 style={styles.header}>Wellness Center Registration</h1>
-//       <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
-//         {/* Personal Details */}
-//         <div style={styles.formGroup}>
-//           <label>Full Name</label>
-//           <input {...register("name")} placeholder="Enter your full name" />
-//           <p style={styles.error}>{errors.name?.message}</p>
-//         </div>
-
-//         <div style={styles.formGroup}>
-//           <label>Date of Birth</label>
-//           <input type="date" {...register("dob")} />
-//           <p style={styles.error}>{errors.dob?.message}</p>
-//         </div>
-
-//         <div style={styles.formGroup}>
-//           <label>Gender</label>
-//           <select {...register("gender")}>
-//             <option value="">Select Gender</option>
-//             <option value="male">Male</option>
-//             <option value="female">Female</option>
-//             <option value="other">Other</option>
-//           </select>
-//           <p style={styles.error}>{errors.gender?.message}</p>
-//         </div>
-
-//         <div style={styles.formGroup}>
-//           <label>Contact Number</label>
-//           <input type="tel" {...register("contact")} placeholder="Enter your contact number" />
-//           <p style={styles.error}>{errors.contact?.message}</p>
-//         </div>
-
-//         <div style={styles.formGroup}>
-//           <label>Email Address</label>
-//           <input type="email" {...register("email")} placeholder="Enter your email" />
-//           <p style={styles.error}>{errors.email?.message}</p>
-//         </div>
-
-//         {/* Service Preferences */}
-//         <div style={styles.formGroup}>
-//           <label>Services Interested In</label>
-//           <div>
-//             <label>
-//               <input type="checkbox" value="Gym" {...register("service")} /> Gym
-//             </label>
-//             <label>
-//               <input type="checkbox" value="Spa" {...register("service")} /> Spa
-//             </label>
-//             <label>
-//               <input type="checkbox" value="Nutrition" {...register("service")} /> Diet & Nutrition
-//             </label>
-//             <label>
-//               <input type="checkbox" value="Skin Treatment" {...register("service")} /> Skin Treatment
-//             </label>
-//           </div>
-//           <p style={styles.error}>{errors.service?.message}</p>
-//         </div>
-
-//         {/* Health Declaration */}
-//         <div style={styles.formGroup}>
-//           <label>
-//             <input type="checkbox" {...register("healthDeclaration")} /> I confirm that I am in good health and fit for fitness activities.
-//           </label>
-//           <p style={styles.error}>{errors.healthDeclaration?.message}</p>
-//         </div>
-
-//         {/* Submit */}
-//         <button type="submit" style={styles.button}>Submit</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   container: {
-//     maxWidth: "500px",
-//     margin: "auto",
-//     padding: "20px",
-//     backgroundColor: "#f9f9f9",
-//     borderRadius: "8px",
-//     boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-//   },
-//   header: {
-//     textAlign: "center",
-//     marginBottom: "20px",
-//   },
-//   form: {
-//     display: "flex",
-//     flexDirection: "column",
-//   },
-//   formGroup: {
-//     marginBottom: "15px",
-//   },
-//   error: {
-//     color: "red",
-//     fontSize: "12px",
-//   },
-//   button: {
-//     backgroundColor: "#007BFF",
-//     color: "#fff",
-//     border: "none",
-//     padding: "10px",
-//     borderRadius: "4px",
-//     cursor: "pointer",
-//   },
-// };
-
-// export default RegistrationForm;

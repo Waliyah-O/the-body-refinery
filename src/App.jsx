@@ -13,6 +13,7 @@ import ChatBotPage from "./pages/chatBot";
 import RegistrationForm from "./features/Forms/RegistrationForm";
 import ShopPage from "./pages/Shop";
 import GymRegistrationForm from "./features/Forms/Reg";
+import MembershipCard from "./features/membershipCards/MemberCards";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route exact path="/exercises" element={<ExercisesPage />} />
           <Route exact path="/register" element={<RegistrationForm />} />
           <Route exact path="/reg" element={<GymRegistrationForm />} />
+          <Route exact path="/cards" element={<MembershipCard />} />
           <Route exact path="/shop" element={<ShopPage />} />
         
           <Route exact path="/druginfo" element={<DrugInfoPage />} />

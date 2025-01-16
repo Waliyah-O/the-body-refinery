@@ -1,0 +1,268 @@
+import React, { useState, useEffect } from "react";
+
+const GymRegistrationForm = () => {
+  // Keep the existing membershipPlans and servicesPricing objects
+  const membershipPlans = {
+    basic: {
+      name: "Basic",
+      description: "Access to gym facilities and basic equipment",
+      monthlyMultiplier: 1,
+    },
+    standard: {
+      name: "Standard",
+      description: "Basic + Group classes and wellness workshops",
+      monthlyMultiplier: 1.5,
+    },
+    premium: {
+      name: "Premium",
+      description: "Standard + Personal training sessions and premium amenities",
+      monthlyMultiplier: 2,
+    },
+  };
+
+  const servicesPricing = {
+    personalTraining: { name: "Personal Training", price: 49 },
+    groupClasses: { name: "Group Classes", price: 29 },
+    spa: { name: "Spa Services", price: 69 },
+    nutrition: { name: "Nutrition Counseling", price: 39 },
+    skinCare: { name: "Skin Care Services", price: 59 },
+    wellness: { name: "Wellness Coaching", price: 45 },
+  };
+
+  // Keep the existing state and functions
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    birthdate: "",
+    gender: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    },
+    membershipType: "",
+    membershipPlan: "",
+    services: [],
+    emergencyContact: {
+      name: "",
+      phone: "",
+      relation: "",
+    },
+    isFitForExercise: false,
+  });
+
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // Keep existing calculateTotalPrice, useEffect, validateForm, handleSubmit, and handleServiceChange functions
+
+  if (submitted) {
+    return (
+      <div className="card w-full max-w-2xl mx-auto bg-base-100 shadow-xl">
+        <div className="card-body">
+          <div className="alert alert-success">
+            <div>
+              Thank you for registering! We'll contact you shortly to confirm your membership. 
+              Your total membership cost: ${totalPrice.toFixed(2)}
+              {formData.membershipType === "monthly"
+                ? "/month"
+                : formData.membershipType === "quarterly"
+                ? "/quarter"
+                : "/year"}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card w-full max-w-2xl mx-auto bg-base-100 shadow-xl">
+      <div className="card-body">
+        <h2 className="card-title text-2xl font-bold text-center">
+          The Body Refinery Gym Membership Registration
+        </h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Personal Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Personal Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">First Name</span>
+                </label>
+                <input
+                  type="text"
+                  className={`input input-bordered ${errors.firstName ? 'input-error' : ''}`}
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                />
+                {errors.firstName && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.firstName}</span>
+                  </label>
+                )}
+              </div>
+              
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Last Name</span>
+                </label>
+                <input
+                  type="text"
+                  className={`input input-bordered ${errors.lastName ? 'input-error' : ''}`}
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                />
+                {errors.lastName && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.lastName}</span>
+                  </label>
+                )}
+              </div>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Gender</span>
+              </label>
+              <select 
+                className={`select select-bordered ${errors.gender ? 'select-error' : ''}`}
+                value={formData.gender}
+                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+              >
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+              {errors.gender && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.gender}</span>
+                </label>
+              )}
+            </div>
+
+            {/* Membership Plan Selection */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Membership Plan</h3>
+              {Object.entries(membershipPlans).map(([key, plan]) => (
+                <div key={key} className="form-control">
+                  <label className="label cursor-pointer justify-start gap-4">
+                    <input
+                      type="radio"
+                      name="membershipPlan"
+                      className="radio"
+                      value={key}
+                      checked={formData.membershipPlan === key}
+                      onChange={(e) => setFormData({ ...formData, membershipPlan: e.target.value })}
+                    />
+                    <div>
+                      <span className="font-semibold">{plan.name}</span>
+                      <p className="text-sm text-gray-500">{plan.description}</p>
+                    </div>
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            {/* Membership Duration */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Membership Duration</h3>
+              <div className="form-control">
+                <label className="label cursor-pointer justify-start gap-4">
+                  <input
+                    type="radio"
+                    name="membershipType"
+                    className="radio"
+                    value="monthly"
+                    checked={formData.membershipType === "monthly"}
+                    onChange={(e) => setFormData({ ...formData, membershipType: e.target.value })}
+                  />
+                  <span>Monthly ($59/month)</span>
+                </label>
+              </div>
+              <div className="form-control">
+                <label className="label cursor-pointer justify-start gap-4">
+                  <input
+                    type="radio"
+                    name="membershipType"
+                    className="radio"
+                    value="quarterly"
+                    checked={formData.membershipType === "quarterly"}
+                    onChange={(e) => setFormData({ ...formData, membershipType: e.target.value })}
+                  />
+                  <span>Quarterly ($159/3 months)</span>
+                </label>
+              </div>
+              <div className="form-control">
+                <label className="label cursor-pointer justify-start gap-4">
+                  <input
+                    type="radio"
+                    name="membershipType"
+                    className="radio"
+                    value="annual"
+                    checked={formData.membershipType === "annual"}
+                    onChange={(e) => setFormData({ ...formData, membershipType: e.target.value })}
+                  />
+                  <span>Annual ($549/year)</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Additional Services */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Additional Services</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {Object.entries(servicesPricing).map(([key, service]) => (
+                  <div key={key} className="form-control border rounded-lg p-4">
+                    <label className="label cursor-pointer justify-start gap-4">
+                      <input
+                        type="checkbox"
+                        className="checkbox"
+                        checked={formData.services.includes(key)}
+                        onChange={() => handleServiceChange(key)}
+                      />
+                      <div>
+                        <span className="font-semibold">{service.name}</span>
+                        <p className="text-sm text-gray-500">${service.price}/month</p>
+                      </div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Total Price Display */}
+            <div className="bg-base-200 p-4 rounded-lg mt-6">
+              <h3 className="text-lg font-semibold">Total Price</h3>
+              <p className="text-2xl font-bold">
+                ${totalPrice.toFixed(2)}
+                <span className="text-sm font-normal text-gray-500">
+                  {formData.membershipType === "monthly"
+                    ? "/month"
+                    : formData.membershipType === "quarterly"
+                    ? "/quarter"
+                    : "/year"}
+                </span>
+              </p>
+            </div>
+
+            {/* Submit Button */}
+            <button type="submit" className="btn btn-primary w-full">
+              Submit Registration
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default GymRegistrationForm;
