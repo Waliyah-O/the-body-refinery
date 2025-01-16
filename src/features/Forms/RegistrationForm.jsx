@@ -19,6 +19,7 @@ import {
 } from "../../../components/ui/select";
 import { Alert, AlertDescription } from "../../../components/ui/alert";
 import { Separator } from "../../../components/ui/separator";
+import MembershipCard from "../membershipCards";
 
 const RegistrationForm = () => {
   const membershipPlans = {
@@ -223,398 +224,430 @@ const RegistrationForm = () => {
     );
   }
 
+  const memberData = {
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    gender: formData.gender,
+    membershipPlan: formData.membershipPlan,
+    membershipType: formData.membershipType,
+    memberNumber: "2024-0001", // Generate this
+    joinDate: new Date().toISOString(),
+    validUntil: "2024-10-01"
+  };
+
+  const memberDetails = {
+    firstName: "Alice",
+    lastName: "Smith",
+    membershipPlan: "standard",
+    membershipType: "monthly",
+    memberNumber: "2024-0023",
+    joinDate: "2023-10-01",
+    validUntil: "2024-10-01"
+  };
+  
+
+  
+
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
-          The Body Refinery Gym Membership Registration
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personal Information */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, firstName: e.target.value })
-                  }
-                  className={errors.firstName ? "border-red-500" : ""}
-                />
-                {errors.firstName && (
-                  <p className="text-red-500 text-sm">{errors.firstName}</p>
-                )}
-              </div>
-              <div className="space-y-2 ">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, lastName: e.target.value })
-                  }
-                  className={errors.lastName ? "border-red-500" : ""}
-                />
-                {errors.lastName && (
-                  <p className="text-red-500 text-sm">{errors.lastName}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="gender">Gender</Label>
-              <Select
-                value={formData.gender}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, gender: value })
-                }
-              >
-                <SelectTrigger
-                  className={errors.gender ? "border-red-500" : ""}
-                >
-                  <SelectValue placeholder="Select gender" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                  <SelectItem value="prefer-not-to-say">
-                    Prefer not to say
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.gender && (
-                <p className="text-red-500 text-sm">{errors.gender}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="birthdate">Birth Date</Label>
-              <Input
-                id="birthdate"
-                type="date"
-                value={formData.birthdate}
-                onChange={(e) =>
-                  setFormData({ ...formData, birthdate: e.target.value })
-                }
-                className={errors.birthdate ? "border-red-500" : ""}
-              />
-              {errors.birthdate && (
-                <p className="text-red-500 text-sm">{errors.birthdate}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Contact Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Contact Information</h3>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className={errors.email ? "border-red-500" : ""}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className={errors.phone ? "border-red-500" : ""}
-              />
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Address */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Address</h3>
-            <div className="space-y-2">
-              <Label htmlFor="street">Street Address</Label>
-              <Input
-                id="street"
-                value={formData.address.street}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    address: { ...formData.address, street: e.target.value },
-                  })
-                }
-                className={errors.street ? "border-red-500" : ""}
-              />
-              {errors.street && (
-                <p className="text-red-500 text-sm">{errors.street}</p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={formData.address.city}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, city: e.target.value },
-                    })
-                  }
-                  className={errors.city ? "border-red-500" : ""}
-                />
-                {errors.city && (
-                  <p className="text-red-500 text-sm">{errors.city}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="state">State</Label>
-                <Input
-                  id="state"
-                  value={formData.address.state}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, state: e.target.value },
-                    })
-                  }
-                  className={errors.state ? "border-red-500" : ""}
-                />
-                {errors.state && (
-                  <p className="text-red-500 text-sm">{errors.state}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="zipCode">ZIP Code</Label>
-              <Input
-                id="zipCode"
-                value={formData.address.zipCode}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    address: { ...formData.address, zipCode: e.target.value },
-                  })
-                }
-                className={errors.zipCode ? "border-red-500" : ""}
-              />
-              {errors.zipCode && (
-                <p className="text-red-500 text-sm">{errors.zipCode}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Membership Plan */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Membership Plan</h3>
-            <RadioGroup
-              onValueChange={(value) =>
-                setFormData({ ...formData, membershipPlan: value })
-              }
-              value={formData.membershipPlan}
-              className="space-y-2"
-            >
-              {Object.entries(membershipPlans).map(([key, plan]) => (
-                <div
-                  key={key}
-                  className="flex items-center space-x-2 p-4 border rounded-lg"
-                >
-                  <RadioGroupItem value={key} id={key} />
-                  <Label htmlFor={key} className="flex flex-col">
-                    <span className="font-semibold">{plan.name}</span>
-                    <span className="text-sm text-gray-500">
-                      {plan.description}
-                    </span>
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-            {errors.membershipPlan && (
-              <p className="text-red-500 text-sm">{errors.membershipPlan}</p>
-            )}
-          </div>
-
-          {/* Membership Duration */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Membership Duration</h3>
-            <RadioGroup
-              onValueChange={(value) =>
-                setFormData({ ...formData, membershipType: value })
-              }
-              value={formData.membershipType}
-              className="space-y-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="monthly" id="monthly" />
-                <Label htmlFor="monthly">Monthly ($59/month)</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="quarterly" id="quarterly" />
-                <Label htmlFor="quarterly">Quarterly ($159/3 months)</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="annual" id="annual" />
-                <Label htmlFor="annual">Annual ($549/year)</Label>
-              </div>
-            </RadioGroup>
-            {errors.membershipType && (
-              <p className="text-red-500 text-sm">{errors.membershipType}</p>
-            )}
-          </div>
-
-          {/* Additional Services */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Additional Services</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {Object.entries(servicesPricing).map(([key, service]) => (
-                <div
-                  key={key}
-                  className="flex items-center space-x-2 p-4 border rounded-lg"
-                >
-                  <Checkbox
-                    id={key}
-                    checked={formData.services.includes(key)}
-                    onCheckedChange={() => handleServiceChange(key)}
-                  />
-                  <Label htmlFor={key} className="flex flex-col">
-                    <span className="font-semibold">{service.name}</span>
-                    <span className="text-sm text-gray-500">
-                      ${service.price}/month
-                    </span>
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Emergency Contact */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Emergency Contact</h3>
+    <>
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">
+            The Body Refinery Gym Membership Registration
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Personal Information */}
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="emergencyName">Name</Label>
-                <Input
-                  id="emergencyName"
-                  value={formData.emergencyContact.name}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      emergencyContact: {
-                        ...formData.emergencyContact,
-                        name: e.target.value,
-                      },
-                    })
-                  }
-                />
+              <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Personal Information
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstName: e.target.value })
+                    }
+                    className={errors.firstName ? "border-red-500" : ""}
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm">{errors.firstName}</p>
+                  )}
+                </div>
+                <div className="space-y-2 ">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastName: e.target.value })
+                    }
+                    className={errors.lastName ? "border-red-500" : ""}
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm">{errors.lastName}</p>
+                  )}
+                </div>
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="emergencyPhone">Phone</Label>
-                <Input
-                  id="emergencyPhone"
-                  type="tel"
-                  value={formData.emergencyContact.phone}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      emergencyContact: {
-                        ...formData.emergencyContact,
-                        phone: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="emergencyRelation">Relation</Label>
+                <Label htmlFor="gender">Gender</Label>
                 <Select
-                  value={formData.emergencyContact.relation}
+                  value={formData.gender}
                   onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      emergencyContact: {
-                        ...formData.emergencyContact,
-                        relation: value,
-                      },
-                    })
+                    setFormData({ ...formData, gender: value })
                   }
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select relation" />
+                  <SelectTrigger
+                    className={errors.gender ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="spouse">Spouse</SelectItem>
-                    <SelectItem value="parent">Parent</SelectItem>
-                    <SelectItem value="sibling">Sibling</SelectItem>
-                    <SelectItem value="friend">Friend</SelectItem>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="prefer-not-to-say">
+                      Prefer not to say
+                    </SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm">{errors.gender}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="birthdate">Birth Date</Label>
+                <Input
+                  id="birthdate"
+                  type="date"
+                  value={formData.birthdate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, birthdate: e.target.value })
+                  }
+                  className={errors.birthdate ? "border-red-500" : ""}
+                />
+                {errors.birthdate && (
+                  <p className="text-red-500 text-sm">{errors.birthdate}</p>
+                )}
               </div>
             </div>
-          </div>
 
-          {/* Fitness Confirmation */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="fitnessConfirmation"
-                checked={formData.isFitForExercise}
-                onCheckedChange={(checked) =>
-                  setFormData({ ...formData, isFitForExercise: checked })
-                }
-              />
-              <Label
-                htmlFor="fitnessConfirmation"
-                className={errors.isFitForExercise ? "text-red-500" : ""}
-              >
-                I confirm that I am fit to engage in fitness activities
-              </Label>
+            {/* Contact Information */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Contact Information</h3>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className={errors.email ? "border-red-500" : ""}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className={errors.phone ? "border-red-500" : ""}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone}</p>
+                )}
+              </div>
             </div>
-            {errors.isFitForExercise && (
-              <p className="text-red-500 text-sm">{errors.isFitForExercise}</p>
-            )}
-          </div>
 
-          {/* Total Price Display */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold">Total Price</h3>
-            <p className="text-2xl font-bold">
-              ${totalPrice.toFixed(2)}
-              <span className="text-sm font-normal text-gray-500">
-                {formData.membershipType === "monthly"
-                  ? "/month"
-                  : formData.membershipType === "quarterly"
-                  ? "/quarter"
-                  : "/year"}
-              </span>
-            </p>
-          </div>
+            {/* Address */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Address</h3>
+              <div className="space-y-2">
+                <Label htmlFor="street">Street Address</Label>
+                <Input
+                  id="street"
+                  value={formData.address.street}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, street: e.target.value },
+                    })
+                  }
+                  className={errors.street ? "border-red-500" : ""}
+                />
+                {errors.street && (
+                  <p className="text-red-500 text-sm">{errors.street}</p>
+                )}
+              </div>
 
-          <Button type="submit" className="w-full">
-            Submit Registration
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    id="city"
+                    value={formData.address.city}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, city: e.target.value },
+                      })
+                    }
+                    className={errors.city ? "border-red-500" : ""}
+                  />
+                  {errors.city && (
+                    <p className="text-red-500 text-sm">{errors.city}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">State</Label>
+                  <Input
+                    id="state"
+                    value={formData.address.state}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, state: e.target.value },
+                      })
+                    }
+                    className={errors.state ? "border-red-500" : ""}
+                  />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">{errors.state}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="zipCode">ZIP Code</Label>
+                <Input
+                  id="zipCode"
+                  value={formData.address.zipCode}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, zipCode: e.target.value },
+                    })
+                  }
+                  className={errors.zipCode ? "border-red-500" : ""}
+                />
+                {errors.zipCode && (
+                  <p className="text-red-500 text-sm">{errors.zipCode}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Membership Plan */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Membership Plan</h3>
+              <RadioGroup
+                onValueChange={(value) =>
+                  setFormData({ ...formData, membershipPlan: value })
+                }
+                value={formData.membershipPlan}
+                className="space-y-2"
+              >
+                {Object.entries(membershipPlans).map(([key, plan]) => (
+                  <div
+                    key={key}
+                    className="flex items-center space-x-2 p-4 border rounded-lg"
+                  >
+                    <RadioGroupItem value={key} id={key} />
+                    <Label htmlFor={key} className="flex flex-col">
+                      <span className="font-semibold">{plan.name}</span>
+                      <span className="text-sm text-gray-500">
+                        {plan.description}
+                      </span>
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {errors.membershipPlan && (
+                <p className="text-red-500 text-sm">{errors.membershipPlan}</p>
+              )}
+            </div>
+
+            {/* Membership Duration */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Membership Duration</h3>
+              <RadioGroup
+                onValueChange={(value) =>
+                  setFormData({ ...formData, membershipType: value })
+                }
+                value={formData.membershipType}
+                className="space-y-2"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="monthly" id="monthly" />
+                  <Label htmlFor="monthly">Monthly ($59/month)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="quarterly" id="quarterly" />
+                  <Label htmlFor="quarterly">Quarterly ($159/3 months)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="annual" id="annual" />
+                  <Label htmlFor="annual">Annual ($549/year)</Label>
+                </div>
+              </RadioGroup>
+              {errors.membershipType && (
+                <p className="text-red-500 text-sm">{errors.membershipType}</p>
+              )}
+            </div>
+
+            {/* Additional Services */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Additional Services</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {Object.entries(servicesPricing).map(([key, service]) => (
+                  <div
+                    key={key}
+                    className="flex items-center space-x-2 p-4 border rounded-lg"
+                  >
+                    <Checkbox
+                      id={key}
+                      checked={formData.services.includes(key)}
+                      onCheckedChange={() => handleServiceChange(key)}
+                    />
+                    <Label htmlFor={key} className="flex flex-col">
+                      <span className="font-semibold">{service.name}</span>
+                      <span className="text-sm text-gray-500">
+                        ${service.price}/month
+                      </span>
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Emergency Contact */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Emergency Contact</h3>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyName">Name</Label>
+                  <Input
+                    id="emergencyName"
+                    value={formData.emergencyContact.name}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        emergencyContact: {
+                          ...formData.emergencyContact,
+                          name: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyPhone">Phone</Label>
+                  <Input
+                    id="emergencyPhone"
+                    type="tel"
+                    value={formData.emergencyContact.phone}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        emergencyContact: {
+                          ...formData.emergencyContact,
+                          phone: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyRelation">Relation</Label>
+                  <Select
+                    value={formData.emergencyContact.relation}
+                    onValueChange={(value) =>
+                      setFormData({
+                        ...formData,
+                        emergencyContact: {
+                          ...formData.emergencyContact,
+                          relation: value,
+                        },
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select relation" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="spouse">Spouse</SelectItem>
+                      <SelectItem value="parent">Parent</SelectItem>
+                      <SelectItem value="sibling">Sibling</SelectItem>
+                      <SelectItem value="friend">Friend</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Fitness Confirmation */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="fitnessConfirmation"
+                  checked={formData.isFitForExercise}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, isFitForExercise: checked })
+                  }
+                />
+                <Label
+                  htmlFor="fitnessConfirmation"
+                  className={errors.isFitForExercise ? "text-red-500" : ""}
+                >
+                  I confirm that I am fit to engage in fitness activities
+                </Label>
+              </div>
+              {errors.isFitForExercise && (
+                <p className="text-red-500 text-sm">
+                  {errors.isFitForExercise}
+                </p>
+              )}
+            </div>
+
+            {/* Total Price Display */}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-semibold">Total Price</h3>
+              <p className="text-2xl font-bold">
+                ${totalPrice.toFixed(2)}
+                <span className="text-sm font-normal text-gray-500">
+                  {formData.membershipType === "monthly"
+                    ? "/month"
+                    : formData.membershipType === "quarterly"
+                    ? "/quarter"
+                    : "/year"}
+                </span>
+              </p>
+            </div>
+
+            <Button type="submit" className="w-full">
+              Submit Registration
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+      {/* <MembershipCard memberData={memberDetails} />; */}
+      <MembershipCard memberData={memberData} />
+    </>
   );
 };
 

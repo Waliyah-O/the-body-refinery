@@ -51,24 +51,12 @@ const Navbar = ({ toggle }) => {
         <Nav scrollNav={scrollNav}>
           <NavbarContainer>
             <NavLogo to="/" onClick={toggleHome}>
-             The Body Refinery
+              The Body Refinery
             </NavLogo>
             <MobileIcon onClick={toggle}>
               <FaBars />
             </MobileIcon>
             <NavMenu>
-              <NavItem>
-                <NavLinks
-                  to="about"
-                  smooth={true}
-                  duration={500}
-                  spy={true}
-                  exact="true"
-                  offset={-80}
-                >
-                  About
-                </NavLinks>
-              </NavItem>
               <NavItem>
                 <NavLinks
                   to="discover"
@@ -81,16 +69,29 @@ const Navbar = ({ toggle }) => {
                   Discover
                 </NavLinks>
               </NavItem>
+
               <NavItem>
                 <NavLinks
-                  to="services"
+                  to="classes"
                   smooth={true}
                   duration={500}
                   spy={true}
                   exact="true"
                   offset={-80}
                 >
-                  Services
+                  Classes
+                </NavLinks>
+              </NavItem>
+              <NavItem>
+                <NavLinks
+                  to="trainers"
+                  smooth={true}
+                  duration={500}
+                  spy={true}
+                  exact="true"
+                  offset={-80}
+                >
+                  Trainers
                 </NavLinks>
               </NavItem>
               <NavItem>
@@ -115,7 +116,7 @@ const Navbar = ({ toggle }) => {
                 exact="true"
                 offset={-80}
               >
-               Shop
+                Shop
               </NavBtnLink>
             </NavBtn>
           </NavbarContainer>

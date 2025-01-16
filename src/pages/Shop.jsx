@@ -1,13 +1,12 @@
-import React from 'react'
-import Shop from '../features/shop'
-import GymRegistrationForm from '../features/Forms/Reg'
+import React from "react";
+import Shop from "../features/shop";
 
 const ShopPage = () => {
   return (
     <div>
-      <GymRegistrationForm/>
-      <Shop/></div>
-  )
-}
+      <Shop />
+    </div>
+  );
+};
 
-export default ShopPage
+export default ShopPage;

@@ -26,10 +26,11 @@ const HeroSection = () => {
         <VideoBg loop muted autoPlay src={Video} type="video/mp4" />
       </HeroBg>
       <HeroContent>
-        <HeroH1>Transform Your Body</HeroH1>
-        <HeroH1>Transform Your Life</HeroH1>
+        <HeroH1>Welcome to Body Refinery Gym</HeroH1>
+        {/* <HeroH1>Transform Your Body</HeroH1>
+        <HeroH1>Transform Your Life</HeroH1> */}
         <HeroP>
-        With a focus on refining both physical and mental well-being, we emphasize a supportive community and professional guidance to help you achieve your fitness goals.
+        Discover our classes, trainers, and schedules tailored to help you achieve your fitness goals.
         </HeroP>
         <HeroBtnWrapper>
           <Button

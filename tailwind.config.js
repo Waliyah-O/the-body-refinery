@@ -5,7 +5,17 @@ module.exports = {
     "./index.html",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage:{
+        animatedBg: "../../../images/animaedShape.svg"
+      }
+    },
+    screens: {
+      sm: "640px", // Small devices
+      md: "768px", // Medium devices
+      lg: "1024px", // Large devices
+      xl: "1280px", // Extra large devices
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

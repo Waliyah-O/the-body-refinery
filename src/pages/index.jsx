@@ -3,7 +3,7 @@ import Sidebar from "../features/Sidebar";
 import Navbar from "../features/Navbar";
 import HeroSection from "../features/HeroSection";
 import InfoSection from "../features/InfoSection";
-import { homeObjOne, homeObjThree, homeObjTwo } from "../features/InfoSection/Data";
+import { homeObjFour, homeObjOne, homeObjThree, homeObjTwo } from "../features/InfoSection/Data";
 import Services from "../features/Services";
 import Footer from "../features/Footer";
 
@@ -23,6 +23,7 @@ const Home = () => {
       <InfoSection {...homeObjTwo} />
       <Services />
       <InfoSection {...homeObjThree} />
+      <InfoSection {...homeObjFour} />
       <Footer />
     </>
   );
