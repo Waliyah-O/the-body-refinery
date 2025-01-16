@@ -14,6 +14,7 @@ const index = () => {
     "Accessories",
     "Supplements",
     "Equipments",
+    "MxTio",
   ];
 
   const filteredProducts = mockProducts.filter((product) => {
