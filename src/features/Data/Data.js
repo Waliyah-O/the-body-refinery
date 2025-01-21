@@ -11,6 +11,10 @@ import {
 // Analytics Cards imports
 import { FaShoePrints, FaBolt } from "react-icons/fa";
 
+// images
+import yogaMat  from '../../images/yoga mat.webpb'
+import gymShorts  from '../../images/gym shorts.webpb'
+
 // Sidebar Data
 export const SidebarData = [
   {
