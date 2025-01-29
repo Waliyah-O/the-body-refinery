@@ -3,9 +3,15 @@ import Sidebar from "../features/Sidebar";
 import Navbar from "../features/Navbar";
 import HeroSection from "../features/HeroSection";
 import InfoSection from "../features/InfoSection";
-import { homeObjFour, homeObjOne, homeObjThree, homeObjTwo } from "../features/InfoSection/Data";
+import {
+  homeObjFour,
+  homeObjOne,
+  homeObjThree,
+  homeObjTwo,
+} from "../features/InfoSection/Data";
 import Services from "../features/Services";
 import Footer from "../features/Footer";
+import GymHomePage from "../features/Home";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +22,8 @@ const Home = () => {
 
   return (
     <>
-      <Sidebar isOpen={isOpen} toggle={toggle} />
+      <GymHomePage />
+      {/* <Sidebar isOpen={isOpen} toggle={toggle} />
       <Navbar toggle={toggle} />
       <HeroSection />
       <InfoSection {...homeObjOne} />
@@ -24,7 +31,7 @@ const Home = () => {
       <Services />
       <InfoSection {...homeObjThree} />
       <InfoSection {...homeObjFour} />
-      <Footer />
+      <Footer /> */}
     </>
   );
 };

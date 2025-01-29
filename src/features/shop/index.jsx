@@ -9,12 +9,12 @@ const index = () => {
 
   const filterCategories = [
     "All",
+    "MxTio",
     "Gear",
     "Clothing",
     "Accessories",
     "Supplements",
     "Equipments",
-    "MxTio",
   ];
 
   const filteredProducts = mockProducts.filter((product) => {
@@ -69,6 +69,22 @@ const index = () => {
         {/* Filter Buttons */}
         <div className="flex justify-center space-x-4 my-6">
           {filterCategories.map((category) => (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              key={category}
+              onClick={() => setFilterCategory(category)}
+              className={`px-4 py-2 rounded font-medium ${
+                filterCategory === category
+                  ? "bg-[#2c6975] text-white"
+                  : "bg-gray-200"
+              }`}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
+        {/* }
             <button
               key={category}
               onClick={() => setFilterCategory(category)}
@@ -81,7 +97,7 @@ const index = () => {
               {category}
             </button>
           ))}
-        </div>
+        </div> */}
         {/* <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           {["Clothing", "Accessories", "Gear", "Supplements"].map(
             (category) => (
@@ -125,7 +141,7 @@ const index = () => {
             ))
           ) : (
             <div className="w-full flex flex-col items-center justify-center text-center">
-              <Frown /> 
+              <Frown />
               <p className="text-center text-gray-600">No products found</p>
             </div>
           )}

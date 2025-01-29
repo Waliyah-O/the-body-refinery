@@ -12,8 +12,17 @@ import {
 import { FaShoePrints, FaBolt } from "react-icons/fa";
 
 // images
-import yogaMat  from '../../images/yoga mat.webpb'
-import gymShorts  from '../../images/gym shorts.webpb'
+import yogaMat from "../../images/yoga mat.webp";
+import gymShorts from "../../images/gym shorts.webp";
+import blndrbtl from "../../images/blender bottle.webp";
+import bandset from "../../images/resistance band.webp";
+
+import sweatshrt from "../../images/sweatshirts.webp";
+import supplements from "../../images/workout supplements.webp";
+import blkst from "../../images/yoga block set.webp";
+import waterbtl from "../../images/water bottles.webp";
+import gymgloves from "../../images/gym gloves.webp";
+import matcleaner from "../../images/diy-yoga-mat-cleaner_lg.avif";
 
 // Sidebar Data
 export const SidebarData = [
@@ -213,7 +222,6 @@ export const mockClasses = [
   },
 ];
 
-
 export const mockTrainers = [
   {
     id: 1,
@@ -297,97 +305,195 @@ export const mockTrainers = [
   },
 ];
 
-
+export const mockTestimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    quote:
+      "FitLife Gym has completely transformed my fitness journey. The trainers are incredibly supportive, and the classes are so much fun!",
+  },
+  {
+    id: 2,
+    name: "Mike Thompson",
+    quote:
+      "I've been a member for over a year now, and I can't imagine going anywhere else. The equipment is top-notch, and the community is amazing.",
+  },
+  {
+    id: 3,
+    name: "Emily Davis",
+    quote:
+      "Joining FitLife was the best decision I ever made. I've lost 20 pounds and gained so much confidence. Highly recommend!",
+  },
+  {
+    id: 4,
+    name: "Chris Martinez",
+    quote:
+      "The personal training sessions are worth every penny. My trainer pushed me to achieve goals I never thought possible.",
+  },
+  {
+    id: 5,
+    name: "Jessica Lee",
+    quote:
+      "I love the variety of classes offered. From yoga to strength training, there's something for everyone. The instructors are fantastic!",
+  },
+  {
+    id: 6,
+    name: "David Wilson",
+    quote:
+      "FitLife has a welcoming atmosphere and state-of-the-art facilities. It's more than a gym—it's a lifestyle.",
+  },
+  {
+    id: 7,
+    name: "Anna Carter",
+    quote:
+      "The group classes are so motivating, and I've made so many friends here. It's like a second home to me now.",
+  },
+  {
+    id: 8,
+    name: "Ryan Adams",
+    quote:
+      "I've tried other gyms, but FitLife stands out because of their focus on individual progress and community support.",
+  },
+  {
+    id: 9,
+    name: "Sophia Brown",
+    quote:
+      "The nutrition advice I received from the trainers has been life-changing. I feel healthier and more energized than ever!",
+  },
+  {
+    id: 10,
+    name: "Daniel Garcia",
+    quote:
+      "FitLife helped me stay consistent with my fitness goals. The flexible membership options are a huge plus!",
+  },
+];
 
 export const mockProducts = [
   {
     id: 1,
     name: "Premium Yoga Mat",
-    image: "https://via.placeholder.com/400x300",
+    image: yogaMat,
     price: 29.99,
     category: "Gear",
-    description: "A non-slip yoga mat designed for comfort and stability during your yoga sessions.",
+    description:
+      "A non-slip yoga mat designed for comfort and stability during your yoga sessions.",
     rating: 4.5,
   },
   {
     id: 2,
     name: "Body Refinery Gym Shorts",
-    image: "https://via.placeholder.com/400x300",
+    image: gymShorts,
     price: 24.99,
     category: "Clothing",
-    description: "Comfortable, breathable gym shorts for maximum flexibility and performance.",
+    description:
+      "Comfortable, breathable gym shorts for maximum flexibility and performance.",
     rating: 4.7,
   },
   {
     id: 3,
     name: "Protein Shake Blender Bottle",
-    image: "https://via.placeholder.com/400x300",
+    image: blndrbtl,
     price: 14.99,
     category: "Accessories",
-    description: "A durable shaker bottle for mixing your protein shakes or pre-workout drinks.",
+    description:
+      "A durable shaker bottle for mixing your protein shakes or pre-workout drinks.",
     rating: 4.3,
   },
   {
     id: 4,
     name: "Resistance Bands Set",
-    image: "https://via.placeholder.com/400x300",
+    image: bandset,
     price: 19.99,
     category: "Gear",
-    description: "Set of high-quality resistance bands for strength training and flexibility exercises.",
+    description:
+      "Set of high-quality resistance bands for strength training and flexibility exercises.",
     rating: 4.8,
   },
   {
     id: 5,
     name: "Body Refinery Sweatshirt",
-    image: "https://via.placeholder.com/400x300",
+    image: sweatshrt,
     price: 39.99,
     category: "Clothing",
-    description: "Soft, cozy sweatshirt with The Body Refinery logo, perfect for warm-ups or lounging.",
+    description:
+      "Soft, cozy sweatshirt with The Body Refinery logo, perfect for warm-ups or lounging.",
     rating: 4.6,
   },
   {
     id: 6,
     name: "Pre-Workout Supplement",
-    image: "https://via.placeholder.com/400x300",
+    image: supplements,
     price: 29.99,
     category: "Supplements",
-    description: "Boost your energy and endurance with our pre-workout supplement.",
+    description:
+      "Boost your energy and endurance with our pre-workout supplement.",
     rating: 4.2,
   },
   {
     id: 7,
     name: "Yoga Block Set",
-    image: "https://via.placeholder.com/400x300",
+    image: blkst,
     price: 12.99,
     category: "Gear",
-    description: "Set of two high-density foam yoga blocks to help with balance and alignment.",
+    description:
+      "Set of two high-density foam yoga blocks to help with balance and alignment.",
     rating: 4.7,
   },
   {
     id: 8,
     name: "Body Refinery Water Bottle",
-    image: "https://via.placeholder.com/400x300",
+    image: waterbtl,
     price: 15.99,
     category: "Accessories",
-    description: "A durable, BPA-free water bottle to keep you hydrated during your workouts.",
+    description:
+      "A durable, BPA-free water bottle to keep you hydrated during your workouts.",
     rating: 4.4,
   },
   {
     id: 9,
     name: "Gym Gloves",
-    image: "https://via.placeholder.com/400x300",
+    image: gymgloves,
     price: 19.99,
     category: "Accessories",
-    description: "Protect your hands with high-quality gym gloves designed for heavy lifting.",
+    description:
+      "Protect your hands with high-quality gym gloves designed for heavy lifting.",
     rating: 4.6,
   },
   {
     id: 10,
     name: "Yoga Mat Cleaner Spray",
-    image: "https://via.placeholder.com/400x300",
+    image: matcleaner,
     price: 8.99,
     category: "Accessories",
-    description: "A gentle spray to clean and maintain your yoga mat’s freshness and durability.",
+    description:
+      "A gentle spray to clean and maintain your yoga mat’s freshness and durability.",
     rating: 4.1,
+  },
+];
+
+export const mockFeatures = [
+  {
+    title: "State-of-the-Art Equipment",
+    text: "We provide the latest fitness equipment to help you achieve your goals.",
+  },
+  {
+    title: "Expert Trainers",
+    text: "Our certified trainers are here to guide and motivate you every step of the way.",
+  },
+  {
+    title: "Flexible Memberships",
+    text: "Choose from a variety of membership plans tailored to your needs.",
+  },
+  {
+    title: "Personal Training",
+    text: "Get 1-on-1 coaching with our expert trainers.",
+  },
+  {
+    title: "Group Classes",
+    text: "Enjoy fun and engaging group fitness sessions.",
+  },
+  {
+    title: "Nutrition Plans",
+    text: "Custom meal plans tailored for your fitness goals.",
   },
 ];

@@ -18,7 +18,6 @@ import DiscoverAll from "./features/Discover/DiscoverAll";
 import AnimatedRoutes from "./components/AnimateRoutes";
 
 function App() {
-
   const pageVariants = {
     initial: { opacity: 0, x: -50 },
     animate: { opacity: 1, x: 0 },
@@ -28,26 +27,25 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          {/* <Route exact path="/" element={<Home />} /> */}
           <Route exact path="/dashboard" element={<DashboardPage />} />
           <Route exact path="/discover" element={<DiscoverPage />} />
           <Route exact path="/discoverall" element={<DiscoverAll />} />
           <Route exact path="/medicals" element={<MedicalsPage />} />
           <Route exact path="/nutrition" element={<NutritionPage />} />
           <Route exact path="/calculators" element={<CalculatorsPage />} />
-     
+
           <Route exact path="/exercises" element={<ExercisesPage />} />
           <Route exact path="/register" element={<RegistrationForm />} />
           <Route exact path="/reg" element={<GymRegistrationForm />} />
           <Route exact path="/cards" element={<MembershipCard />} />
           {/* <Route exact path="/shop" element={<ShopPage />} /> */}
-        
+
           <Route exact path="/druginfo" element={<DrugInfoPage />} />
           <Route exact path="/calorieloss" element={<CalorieLossComponent />} />
           <Route exact path="/chatbot" element={<ChatBotPage />} />
-         
         </Routes>
-        <AnimatedRoutes/>
+        <AnimatedRoutes />
       </Router>
     </>
   );
