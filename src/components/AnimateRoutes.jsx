@@ -6,6 +6,7 @@ import ClassesSchedule from "../features/classes/ClassSchedule";
 import TrainerProfile from "../features/profiles/TrainerProfiles";
 import ShopPage from "../pages/Shop";
 import Home from "../pages";
+import RegistrationForm from "../features/Forms/RegistrationForm";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -57,6 +58,11 @@ const AnimatedRoutes = () => {
                 Shop
               </Link>
             </li>
+            <li>
+              <Link to="/register" className="hover:underline">
+                Register
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -89,6 +95,11 @@ const AnimatedRoutes = () => {
             <li>
               <Link to="/shop" className="block" onClick={toggleMenu}>
                 Shop
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" className="block" onClick={toggleMenu}>
+                Register
               </Link>
             </li>
           </ul>
@@ -152,6 +163,21 @@ const AnimatedRoutes = () => {
                   transition={{ duration: 0.5 }}
                 >
                   <ShopPage />
+                </motion.div>
+              }
+            />
+            <Route
+              exact
+              path="/register"
+              element={
+                <motion.div
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.5 }}
+                >
+                  <RegistrationForm />
                 </motion.div>
               }
             />

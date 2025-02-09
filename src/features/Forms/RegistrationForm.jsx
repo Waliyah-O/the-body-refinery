@@ -18,10 +18,14 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Alert, AlertDescription } from "../../../components/ui/alert";
-import { Separator } from "../../../components/ui/separator";
 import MembershipCard from "../membershipCards";
+import { CheckIcon } from "lucide-react";
 
 const RegistrationForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
   const membershipPlans = {
     basic: {
       name: "Basic",
@@ -232,7 +236,7 @@ const RegistrationForm = () => {
     membershipType: formData.membershipType,
     memberNumber: "2024-0001", // Generate this
     joinDate: new Date().toISOString(),
-    validUntil: "2024-10-01"
+    validUntil: "2024-10-01",
   };
 
   const memberDetails = {
@@ -242,18 +246,15 @@ const RegistrationForm = () => {
     membershipType: "monthly",
     memberNumber: "2024-0023",
     joinDate: "2023-10-01",
-    validUntil: "2024-10-01"
+    validUntil: "2024-10-01",
   };
-  
-
-  
 
   return (
     <>
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            The Body Refinery Gym Membership Registration
+            Membership Registration
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -639,14 +640,41 @@ const RegistrationForm = () => {
               </p>
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-primary text-white">
               Submit Registration
             </Button>
           </form>
         </CardContent>
       </Card>
       {/* <MembershipCard memberData={memberDetails} />; */}
-      <MembershipCard memberData={memberData} />
+
+      <div
+        className="fixed bottom-5 right-5 p-3 text-white rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-gray-700"
+        onClick={toggleMenu}
+      >
+        {isOpen ? (
+          <div className="rounded-full bg-primary p-3 flex items-center justify-center">
+            <CheckIcon />
+          </div>
+        ) : (
+          <div className="relative">
+            <MembershipCard memberData={memberData} />
+          </div>
+        )}
+      </div>
+
+      {/* <div
+        className={`fixed bottom-5 right-5 p-3 text-white ${
+          isOpen ? "bg-gray-800" : "transparent"
+        } rounded-full shadow-lg hover:bg-gray-700 transition-all`}
+        onClick={toggleMenu}
+      >
+        {isOpen ? (
+          <div className="">check</div>
+        ) : (
+          <MembershipCard memberData={memberData} />
+        )}
+      </div> */}
     </>
   );
 };

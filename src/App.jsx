@@ -11,8 +11,6 @@ import DrugInfoPage from "./pages/drugInfo";
 import CalorieLossComponent from "./features/Calculators/calories";
 import ChatBotPage from "./pages/chatBot";
 import RegistrationForm from "./features/Forms/RegistrationForm";
-import ShopPage from "./pages/Shop";
-import GymRegistrationForm from "./features/Forms/Reg";
 import MembershipCard from "./features/membershipCards";
 import DiscoverAll from "./features/Discover/DiscoverAll";
 import AnimatedRoutes from "./components/AnimateRoutes";
@@ -36,8 +34,7 @@ function App() {
           <Route exact path="/calculators" element={<CalculatorsPage />} />
 
           <Route exact path="/exercises" element={<ExercisesPage />} />
-          <Route exact path="/register" element={<RegistrationForm />} />
-          <Route exact path="/reg" element={<GymRegistrationForm />} />
+
           <Route exact path="/cards" element={<MembershipCard />} />
           {/* <Route exact path="/shop" element={<ShopPage />} /> */}
 

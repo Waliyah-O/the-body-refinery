@@ -310,7 +310,7 @@ export const mockTestimonials = [
     id: 1,
     name: "Sarah Johnson",
     quote:
-      "FitLife Gym has completely transformed my fitness journey. The trainers are incredibly supportive, and the classes are so much fun!",
+      "Body Refinery Gym Gym has completely transformed my fitness journey. The trainers are incredibly supportive, and the classes are so much fun!",
   },
   {
     id: 2,
@@ -322,7 +322,7 @@ export const mockTestimonials = [
     id: 3,
     name: "Emily Davis",
     quote:
-      "Joining FitLife was the best decision I ever made. I've lost 20 pounds and gained so much confidence. Highly recommend!",
+      "Joining Body Refinery Gym was the best decision I ever made. I've lost 20 pounds and gained so much confidence. Highly recommend!",
   },
   {
     id: 4,
@@ -340,7 +340,7 @@ export const mockTestimonials = [
     id: 6,
     name: "David Wilson",
     quote:
-      "FitLife has a welcoming atmosphere and state-of-the-art facilities. It's more than a gym—it's a lifestyle.",
+      "Body Refinery Gym has a welcoming atmosphere and state-of-the-art facilities. It's more than a gym—it's a lifestyle.",
   },
   {
     id: 7,
@@ -352,7 +352,7 @@ export const mockTestimonials = [
     id: 8,
     name: "Ryan Adams",
     quote:
-      "I've tried other gyms, but FitLife stands out because of their focus on individual progress and community support.",
+      "I've tried other gyms, but Body Refinery Gym stands out because of their focus on individual progress and community support.",
   },
   {
     id: 9,
@@ -364,7 +364,7 @@ export const mockTestimonials = [
     id: 10,
     name: "Daniel Garcia",
     quote:
-      "FitLife helped me stay consistent with my fitness goals. The flexible membership options are a huge plus!",
+      "Body Refinery Gym helped me stay consistent with my fitness goals. The flexible membership options are a huge plus!",
   },
 ];
 

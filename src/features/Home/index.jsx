@@ -24,7 +24,7 @@ const GymHomePage = () => {
       {/* Gym Features Section */}
       <div className="container mx-auto py-12 px-4">
         <h2 className="text-3xl font-bold text-center mb-8">
-          Why Choose FitLife?
+          Why Choose Body Refinery Gym?
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {mockFeatures.map((feature, index) => (
@@ -97,7 +97,7 @@ const GymHomePage = () => {
           Ready to Transform Your Life?
         </h2>
         <p className="text-xl mb-6">
-          Join FitLife Gym today and start your fitness journey.
+          Join Body Refinery Gym Gym today and start your fitness journey.
         </p>
         <button className="bg-white text-[#2c6975] px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
           Sign Up Now
